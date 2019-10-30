@@ -10,7 +10,7 @@ use App\Http\Services\BaseService;
  * @Author YiYuan-LIn
  * @Date: 2019/10/29
  */
-class WebSocketServer extends BaseService
+class TimerServer extends BaseService
 {
     /**
      * 连接地址
@@ -40,30 +40,21 @@ class WebSocketServer extends BaseService
      * @Date: 2019/10/29
      * @enumeration:
      * @return mixed
-     * @description Udp连接
+     * @description 定时器
      */
     public function init()
     {
         try {
-            $ws = new \swoole_websocket_server($this->server_url, $this->server_port);
+            //每隔2000ms触发一次
+            $timer_tick_id = \swoole_timer_tick(2000, function ($timer_id) {
+                                    echo microtime() . "\n";
+                                });
 
-            //监听webSocket连接事件
-            $ws->on('open', function($ws, $request){
-                var_dump($request->fd, $request->server, $request->get);
-                $ws->push($request->fd, 'Hello Welcome!');
+            //10000s后执行此函数
+            \swoole_timer_after(10000, function () use ($timer_tick_id) {
+                //清除定时器
+                \swoole_timer_clear($timer_tick_id);
             });
-
-            $ws->on('message', function($ws, $frame) {
-                var_dump($frame);
-                $ws->push($frame->fd, "Server: $frame->data $frame->fd");
-            });
-
-            //监听WebSocket连接关闭事件
-            $ws->on('close', function ($ws, $fd) {
-                echo "client-{$fd} is closed\n";
-            });
-
-            $ws->start();
         }catch (\Exception $e) {
             return $e->getMessage();
         }

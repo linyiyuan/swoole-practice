@@ -19,7 +19,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
-        \App\Http\Middleware\EnableCrossRequestMiddleware::class,
     ];
 
     /**
@@ -63,9 +62,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'jwt.auth' => 'Tymon\JWTAuth\Middleware\GetUserFromToken',
         'jwt.refresh' => 'Tymon\JWTAuth\Middleware\RefreshToken',
-        'refresh.token' => \App\Http\Middleware\RefreshToken::class,
-        'check.permission' => \App\Http\Middleware\CheckPermission::class,
-        'record.operate' => \App\Http\Middleware\RecordOperate::class,
     ];
 
     /**

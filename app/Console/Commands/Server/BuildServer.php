@@ -4,7 +4,7 @@ namespace App\Console\Commands\Server;
 
 use Illuminate\Console\Command;
 
-class TcpServer extends Command
+class BuildServer extends Command
 {
     /**
      * The name and signature of the console command.
@@ -18,7 +18,7 @@ class TcpServer extends Command
      *
      * @var string
      */
-    protected $description = '建立一个TCP连接';
+    protected $description = '建立一个服务端连接';
 
     /**
      * Create a new command instance.

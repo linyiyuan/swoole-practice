@@ -21,6 +21,12 @@ class BuildServer extends Command
     protected $description = '建立一个服务端连接';
 
     /**
+     * 实例化对象
+     *
+     * @var object
+     */
+    protected $server = null;
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -38,9 +44,12 @@ class BuildServer extends Command
     public function handle()
     {
         try {
-            $server = '\\App\\Http\\Services\\Server\\'. $this->argument('server') . 'Server';
+            //获取对象
+            $this->server = '\\App\\Http\\Server\\'. $this->argument('server') . 'Server';
 
-            $server::getInstance()->init();
+            //启动服务
+            $this->server::getInstance()->init();
+
         }catch (\Exception $e) {
             return 'Error Code By ' . $e->getFile() . '\n' . $e->getLine() . '\n' . $e->getMessage();
         }

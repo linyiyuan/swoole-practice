@@ -44,9 +44,10 @@ abstract class BaseServer
         $this->server_port = env('SERVER_PORT', 9501);
 
         $this->setting = [
-            'worker_num' => 2,  //进程数
-            'reactor_num' => 2, //线程数
-            'max_request' => 3
+            'worker_num' => 2,
+            'reactor_num' => 2,
+            'max_request' => 3,
+            'task_worker_num' => 2,
         ];
     }
 

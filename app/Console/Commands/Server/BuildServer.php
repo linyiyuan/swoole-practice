@@ -45,7 +45,7 @@ class BuildServer extends Command
     {
         try {
             //获取对象
-            $this->server = '\\App\\Http\\Server\\'. $this->argument('server') . 'Server';
+            $this->server = '\\App\\Http\\Server\\'. $this->argument('server') . '\\InitServer';
 
             //启动服务
             $this->server::getInstance()->init();

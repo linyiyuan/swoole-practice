@@ -24,6 +24,12 @@ abstract class BaseServer
     protected  $server_port = '';
 
     /**
+     * admin server 端口
+     * @var int
+     */
+    protected  $server_admin_port = '';
+
+    /**
      * 初始化配置项
      * @var array
      */
@@ -42,6 +48,7 @@ abstract class BaseServer
     {
         $this->server_url = env('SERVER_URL', '127.0.0.1');
         $this->server_port = env('SERVER_PORT', 9501);
+        $this->server_admin_port = env('SERVER_ADMIN_PORT', 9502);
 
         $this->setting = [
             'worker_num' => 2,

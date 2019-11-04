@@ -90,6 +90,23 @@ class CommunicationEvent extends BaseServer
     }
 
     /**
+     * 接收到UDP发送数据包回调方法（内网管理）
+     *
+     * @param \Swoole\Server $server
+     * @param string $data
+     * @param array $client_info
+     */
+    public function packet(\Swoole\Server $server, string $data, array $client_info)
+    {
+        $connections = $server->connections;
+
+        $clientAddress = $client_info['address'];
+        $clientPort = $client_info['port'];
+
+        $server->sendto($clientAddress, $clientPort, '当前TCP链接数为' . count($connections));
+    }
+
+    /**
      * 客户端断开连接回调方法
      *
      * @param \Swoole\Server $server 服务器对象

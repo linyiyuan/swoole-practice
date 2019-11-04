@@ -8,8 +8,6 @@ use App\Http\Server\Tcp\Events\InitEvent;
 use App\Http\Server\Tcp\Events\TaskWorkerEvent;
 use App\Http\Server\Tcp\Events\WorkerEvent;
 use App\Http\Server\Tcp\Events\ManagerEvent;
-use Illuminate\Support\Facades\Redis;
-use Swoole\Server\Task;
 
 /**
  * Class TcpServer
@@ -33,10 +31,14 @@ class InitServer extends BaseServer
         parent::__construct();
         $this->_serv = new \Swoole\Server($this->server_url, $this->server_port);
 
+        //这里增加一个UDP端口用来作为内网管理
+        $this->_serv->listen($this->server_url, $this->server_admin_port, SWOOLE_SOCK_UDP);
+
         //设置选项
         $this->setOption();
         //注册事件
         $this->registerEvents();
+
     }
 
     /**
@@ -82,6 +84,7 @@ class InitServer extends BaseServer
         //连接相关事件
         $this->_serv->on('Connect', [CommunicationEvent::getInstance(), 'Connect']);
         $this->_serv->on('Receive', [CommunicationEvent::getInstance(), 'Receive']);
+        $this->_serv->on('Packet', [CommunicationEvent::getInstance(), 'Packet']);
         $this->_serv->on('Close', [CommunicationEvent::getInstance(), 'Close']);
 
         //Worker进程相关事件

@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands\Server;
 
+use App\Mail\NotificationClient;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class BuildServer extends Command
 {

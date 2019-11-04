@@ -3,8 +3,6 @@
 namespace App\Http\Server\Tcp\Events;
 
 use App\Http\Server\BaseServer;
-use App\Mail\NotificationClient;
-use Illuminate\Support\Facades\Mail;
 
 /**
  * 初始化事件 包含了服务的启动以及结束时间
@@ -38,7 +36,11 @@ class CommunicationEvent extends BaseServer
     {
         $this->_serv = $server;
 
-        Mail::to('linyiyuann@gmail.com')->send(new NotificationClient($this->_serv->getClientInfo($fd)['remote_ip']));
+        //异步发送邮件通知客户端用户
+        $this->_serv->task([
+            'fd' => $fd,
+            'remote_ip' => $this->_serv->getClientInfo($fd)['remote_ip'],
+        ]);
 
         //将客户端信息写入Redis中
         $this->_serv->redis->set($this->CLIENT_INFO_KEY . $fd, json_encode($this->_serv->getClientInfo($fd)));
@@ -77,7 +79,7 @@ class CommunicationEvent extends BaseServer
                 $this->_serv->close($fd);
                 break;
             default:
-                $this->_serv->send($fd, '连接服务器成功 请输入一下命令以获取相关信息：' . PHP_EOL .
+                $this->_serv->send($fd, '命令识别失败 请输入一下命令以获取相关信息：' . PHP_EOL .
                     '获取服务器连接数: 1' . PHP_EOL .
                     '获取服务器IP信息: 2' . PHP_EOL .
                     '获取运行当前连接的Worker进程: 3' . PHP_EOL.

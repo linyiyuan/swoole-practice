@@ -62,6 +62,7 @@ class InitServer extends BaseServer
             'worker_num' => 1,
             'reactor_num' => 2,
             'max_request' => 3,
+            'task_worker_num' => 2,
         ];
 
         $this->_serv->set($this->setting);

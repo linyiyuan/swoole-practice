@@ -3,7 +3,8 @@
 namespace App\Http\Server\Tcp\Events;
 
 use App\Http\Server\BaseServer;
-use Illuminate\Support\Facades\Redis;
+use App\Mail\NotificationClient;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * 初始化事件 包含了服务的启动以及结束时间
@@ -36,6 +37,8 @@ class CommunicationEvent extends BaseServer
     public function connect(\Swoole\Server $server, int $fd, int $reactor_id)
     {
         $this->_serv = $server;
+
+        Mail::to('linyiyuann@gmail.com')->send(new NotificationClient($this->_serv->getClientInfo($fd)['remote_ip']));
 
         //将客户端信息写入Redis中
         $this->_serv->redis->set($this->CLIENT_INFO_KEY . $fd, json_encode($this->_serv->getClientInfo($fd)));

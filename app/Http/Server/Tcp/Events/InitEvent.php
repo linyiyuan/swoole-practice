@@ -28,7 +28,6 @@ class InitEvent extends BaseServer
     public function start(\Swoole\Server $server)
     {
         $this->_serv = $server;
-        $this->_serv->redis = Redis::connection('default');
 
         echo 'The Tcp Server is Started';
     }

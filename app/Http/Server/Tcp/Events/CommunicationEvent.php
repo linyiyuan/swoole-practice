@@ -2,7 +2,7 @@
 
 namespace App\Http\Server\Tcp\Events;
 
-use App\Http\Server\BaseServer;
+use App\Http\Server\Tcp\InitServer;
 
 /**
  * 初始化事件 包含了服务的启动以及结束时间
@@ -11,14 +11,8 @@ use App\Http\Server\BaseServer;
  * @Author YiYuan-LIn
  * @Date: 2019/11/2
  */
-class CommunicationEvent extends BaseServer
+class CommunicationEvent extends InitServer
 {
-    /**
-     * 服务对象
-     * @var object
-     */
-    private $_serv = null;
-
     /**
      * 客户端信息Redis存储键
      * @var object

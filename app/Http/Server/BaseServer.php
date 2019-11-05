@@ -12,51 +12,10 @@ namespace App\Http\Server;
 abstract class BaseServer
 {
     /**
-     * Server端口
-     * @var string
-     */
-    protected  $server_url = '';
-
-    /**
-     * Server端口
-     * @var int
-     */
-    protected  $server_port = '';
-
-    /**
-     * admin server 端口
-     * @var int
-     */
-    protected  $server_admin_port = '';
-
-    /**
-     * 初始化配置项
-     * @var array
-     */
-    protected  $setting = '';
-
-    /**
      * 静态实例
      * @var object
      */
     protected static $_instance = [];
-
-    /**
-     * TcpServer constructor.
-     */
-    protected function __construct()
-    {
-        $this->server_url = env('SERVER_URL', '127.0.0.1');
-        $this->server_port = env('SERVER_PORT', 9501);
-        $this->server_admin_port = env('SERVER_ADMIN_PORT', 9502);
-
-        $this->setting = [
-            'worker_num' => 2,
-            'reactor_num' => 2,
-            'max_request' => 3,
-            'task_worker_num' => 2,
-        ];
-    }
 
     /**
      * @Author YiYuan-LIn

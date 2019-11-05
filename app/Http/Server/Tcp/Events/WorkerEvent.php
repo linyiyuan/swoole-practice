@@ -2,8 +2,7 @@
 
 namespace App\Http\Server\Tcp\Events;
 
-use App\Http\Server\BaseServer;
-use App\Http\Utils\GetTimeByCron;
+use App\Http\Server\Tcp\InitServer;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -13,14 +12,8 @@ use Illuminate\Support\Facades\Redis;
  * @Author YiYuan-LIn
  * @Date: 2019/11/2
  */
-class WorkerEvent extends BaseServer
+class WorkerEvent extends InitServer
 {
-    /**
-     * 服务对象
-     * @var object
-     */
-    private $_serv = null;
-
     /**
      * 主线程启动时回调方法
      *

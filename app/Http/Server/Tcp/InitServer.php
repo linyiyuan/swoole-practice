@@ -21,37 +21,54 @@ class InitServer extends BaseServer
      * 服务对象
      * @var object
      */
-    private $_serv = null;
+    public $_serv = null;
 
     /**
-     * TcpServer constructor.
+     * Server端口
+     * @var string
      */
-    public function __construct()
+    protected  $server_url = '';
+
+    /**
+     * Server端口
+     * @var int
+     */
+    protected  $server_port = '';
+
+    /**
+     * admin server 端口
+     * @var int
+     */
+    protected  $server_admin_port = '';
+
+    /**
+     * 初始化配置项
+     * @var array
+     */
+    protected  $setting = '';
+
+    /**
+     * 服务初始化
+     *
+     * @return void
+     */
+    public function init()
     {
-        parent::__construct();
-        $this->_serv = new \Swoole\Server($this->server_url, $this->server_port);
+        $this->server_url = env('SERVER_URL', '127.0.0.1');
+        $this->server_port = env('SERVER_PORT', 9501);
+        $this->server_admin_port = env('SERVER_ADMIN_PORT', 9502);
+
+        //注册服务
+        if ($this->_serv == null)  $this->_serv = new \Swoole\Server($this->server_url, $this->server_port);
 
         //这里增加一个UDP端口用来作为内网管理
         $this->_serv->listen($this->server_url, $this->server_admin_port, SWOOLE_SOCK_UDP);
 
-        //设置选项
         $this->setOption();
-        //注册事件
         $this->registerEvents();
-
-    }
-
-    /**
-     * 初始化服务
-     *
-     * @Author YiYuan-LIn
-     * @Date: 2019/11/1
-     */
-    public function init()
-    {
-        //启动服务
         $this->_serv->start();
     }
+
 
     /**
      * 设置选项

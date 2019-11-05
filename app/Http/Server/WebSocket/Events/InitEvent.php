@@ -2,7 +2,7 @@
 
 namespace App\Http\Server\WebSocket\Events;
 
-use App\Http\Server\BaseServer;
+use App\Http\Server\WebSocket\InitServer;
 
 /**
  * 初始化事件 包含了服务的启动以及结束时间
@@ -11,14 +11,8 @@ use App\Http\Server\BaseServer;
  * @Author YiYuan-LIn
  * @Date: 2019/11/2
  */
-class InitEvent extends BaseServer
+class InitEvent extends InitServer
 {
-    /**
-     * 服务对象
-     * @var object
-     */
-    private $_serv = null;
-
     /**
      * 主线程启动时回调方法
      *
@@ -26,8 +20,6 @@ class InitEvent extends BaseServer
      */
     public function start(\Swoole\Server $server)
     {
-        $this->_serv = $server;
-
         echo 'The WebSocket Server is Started';
     }
 
@@ -39,8 +31,6 @@ class InitEvent extends BaseServer
      */
     public function shutDown(\Swoole\Server $server)
     {
-        $this->_serv = $server;
-
         echo 'The WebSocket Server is Stop';
     }
 }

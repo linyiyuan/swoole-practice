@@ -2,7 +2,7 @@
 
 namespace App\Http\Server\WebSocket\Events;
 
-use App\Http\Server\BaseServer;
+use App\Http\Server\WebSocket\InitServer;
 
 /**
  * 信息传送事件
@@ -11,14 +11,8 @@ use App\Http\Server\BaseServer;
  * @Author YiYuan-LIn
  * @Date: 2019/11/2
  */
-class MessageEvent extends BaseServer
+class MessageEvent extends InitServer
 {
-    /**
-     * 服务对象
-     * @var object
-     */
-    private $_serv = null;
-
     /**
      * 客户端与WebSocket服务器建立连接时回调方法
      *
@@ -28,7 +22,6 @@ class MessageEvent extends BaseServer
     public function open(\Swoole\WebSocket\Server $server, \swoole\http\request $request)
     {
         $this->_serv = $server;
-
         $this->_serv->push($request->fd, '连接成功');
     }
 
@@ -42,7 +35,19 @@ class MessageEvent extends BaseServer
     {
         echo '<pre>';
         print_r($frame);
+
+        $this->_serv->push($frame->fd, $frame->data);
     }
 
+    /**
+     * 客户端与服务器断开连接回调方法
+     *
+     * @param \Swoole\WebSocket\Server $server
+     * @param int $fd
+     */
+    public function close(\Swoole\WebSocket\Server $server, int $fd)
+    {
+        echo $fd . '断开连接' . PHP_EOL;
 
+    }
 }

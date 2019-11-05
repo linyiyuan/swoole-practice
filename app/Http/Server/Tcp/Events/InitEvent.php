@@ -2,8 +2,7 @@
 
 namespace App\Http\Server\Tcp\Events;
 
-use App\Http\Server\BaseServer;
-use Illuminate\Support\Facades\Redis;
+use App\Http\Server\Tcp\InitServer;
 
 /**
  * 初始化事件 包含了服务的启动以及结束时间
@@ -12,14 +11,8 @@ use Illuminate\Support\Facades\Redis;
  * @Author YiYuan-LIn
  * @Date: 2019/11/2
  */
-class InitEvent extends BaseServer
+class InitEvent extends InitServer
 {
-    /**
-     * 服务对象
-     * @var object
-     */
-    private $_serv = null;
-
     /**
      * 主线程启动时回调方法
      *

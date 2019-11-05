@@ -2,8 +2,7 @@
 
 namespace App\Http\Server\Tcp\Events;
 
-use App\Http\Server\BaseServer;
-use Illuminate\Support\Facades\Redis;
+use App\Http\Server\Tcp\InitServer;
 
 /**
  * Worker进程相关事件
@@ -12,14 +11,8 @@ use Illuminate\Support\Facades\Redis;
  * @Author YiYuan-LIn
  * @Date: 2019/11/2
  */
-class ManagerEvent extends BaseServer
+class ManagerEvent extends InitServer
 {
-    /**
-     * 服务对象
-     * @var object
-     */
-    private $_serv = null;
-
     /**
      * 管理进程启动回调方法
      *

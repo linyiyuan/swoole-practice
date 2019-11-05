@@ -2,7 +2,7 @@
 
 namespace App\Http\Server\Tcp\Events;
 
-use App\Http\Server\BaseServer;
+use App\Http\Server\Tcp\InitServer;
 use App\Mail\NotificationClient;
 use Illuminate\Support\Facades\Mail;
 
@@ -13,14 +13,8 @@ use Illuminate\Support\Facades\Mail;
  * @Author YiYuan-LIn
  * @Date: 2019/11/2
  */
-class TaskWorkerEvent extends BaseServer
+class TaskWorkerEvent extends InitServer
 {
-    /**
-     * 服务对象
-     * @var object
-     */
-    private $_serv = null;
-
     /**
      * Task异步任务队列回调方法
      *

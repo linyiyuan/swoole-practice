@@ -23,10 +23,12 @@ class GetTimeByCron
     {
         $sendData['type'] = 1;
         $sendData['expression'] = $cron;
+        
+        $url = 'https://tool.lu/crontab/ajax.html';
 
         /* 调用服务端接口获取数据 */
         $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, 'https://tool.lu/crontab/ajax.html');
+        curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_POST, 1);

@@ -18,14 +18,14 @@ class BuildCoroutine extends Command
      *
      * @var string
      */
-    protected $description = '建立一个协程';
+    protected $description = '建立一个协程例子';
 
     /**
-     * 实例化对象
-     *
+     * 对象
      * @var object
      */
-    protected $server = null;
+    protected $obj = null;
+
     /**
      * Create a new command instance.
      *
@@ -45,10 +45,10 @@ class BuildCoroutine extends Command
     {
         try {
             //获取对象
-            $this->server = '\\App\\Http\\Coroutine\\'. $this->argument('coroutine') . '\\InitServer';
+            $this->obj = '\\App\\Http\\Coroutine\\Example\\'. $this->argument('coroutine') . 'Coroutine';
 
             //启动服务
-            $this->server::getInstance()->init();
+            $this->obj::getInstance()->init();
 
         }catch (\Exception $e) {
             return 'Error Code By ' . $e->getFile() . '\n' . $e->getLine() . '\n' . $e->getMessage();

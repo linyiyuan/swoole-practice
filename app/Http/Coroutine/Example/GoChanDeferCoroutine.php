@@ -84,8 +84,8 @@ class GoChanDeferCoroutine extends BaseCoroutine
                 'Accept-Encoding' => 'gzip',
             ]);
             $ret = $cli->get('/');
-            // $cli->body 响应内容过大，这里用 Http 状态码作为测试
-            $chan->push(['www.163.com' => $cli->statusCode]);
+
+            $chan->push(['www.163.com' => $cli->statusCode]); //$cli->body 响应内容过大，这里用 Http 状态码作为测试
         });
 
         echo '正在执行';

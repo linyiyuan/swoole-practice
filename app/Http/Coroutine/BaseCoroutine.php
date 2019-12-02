@@ -56,4 +56,45 @@ abstract class BaseCoroutine
         $errTemplate = "EXCEPTION::". $message . "\r\nERRCODE::". $code . "\r\nFILE::". $file. "::LINE::". $line;
         return $errTemplate;
     }
+
+    /**
+     * @Author YiYuan-LIn
+     * @Date: 2019/4/30
+     * @param string $code
+     * @param string $message
+     * @param array $data
+     * @return \Illuminate\Http\JsonResponse
+     * @description 错误返回
+     */
+    public function errorResponse($code = '', $message = '', $data = [])
+    {
+        if ($code == '') $code = 500;
+
+        $data = [
+            'errorCode' => $code,
+            'message' => $message,
+            'data' => $data
+        ];
+
+        return Response()->json($data);
+    }
+
+    /**
+     * @Author YiYuan-LIn
+     * @Date: 2019/4/30
+     * @param \Exception $e
+     * @return \Illuminate\Http\JsonResponse
+     * @description 对异常进行处理并返回
+     */
+    public function errorExp(\Exception $e)
+    {
+        if (!$e->getCode()) {
+            $code = 500;
+            $message = '服务器错误 ' . $e->getMessage() . ':: FILE:' . $e->getFile() . ':: LINE: ' . $e->getLine();
+        } else {
+            $code = $e->getCode();
+            $message = $e->getMessage();
+        }
+        return $this->errorResponse($code, $message);
+    }
 }

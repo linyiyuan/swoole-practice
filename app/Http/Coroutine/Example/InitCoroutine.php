@@ -33,15 +33,41 @@ class InitCoroutine extends BaseCoroutine
             //当使用co::sleep co::pdo 这种可以实现同样的效果，同样是切换成协程异步IO
             \Swoole\Runtime::enableCoroutine();
 
-
             $coroutineId1 = go(function () {
                 \Co::sleep(1);
-                echo 'coroutine 1';
+                echo 'coroutine 1 start';
+
+
+                go(function () {
+                    echo '父协程ID' . \Co::getPcid();
+                });
+                //协程关闭前调用，是stack
+                defer(function () {
+                    echo 'coroutine 1 stop 1';
+                });
+
+                defer(function () {
+                    echo 'coroutine 1 stop 2';
+                });
+
+                defer(function () {
+                    echo 'coroutine 1 stop 3';
+                });
             });
 
-            $coroutineId2 = go(function () {
-                \Co::sleep(1);
+            $coroutineId2 = go(function ()  use ($coroutineId1) {
+                \Co::sleep(3);
                 echo 'coroutine 2';
+
+                go(function () {
+                    echo '父协程ID' . \Co::getPcid();
+                });
+
+                var_dump(\Co::exists($coroutineId1));
+
+                defer(function () {
+                    echo 'coroutine 2 stop';
+                });
             });
 
             echo $coroutineId1;

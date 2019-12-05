@@ -33,44 +33,15 @@ class InitCoroutine extends BaseCoroutine
             //当使用co::sleep co::pdo 这种可以实现同样的效果，同样是切换成协程异步IO
             \Swoole\Runtime::enableCoroutine();
 
-            $coroutineId1 = go(function () {
-                \Co::sleep(1);
-                echo 'coroutine 1 start';
+            //设置配置项
+            self::setOption();
 
+            $this->create();
+            $this->defer();
+            $this->exists();
+            $this->yieldResume();
+            $this->info();
 
-                go(function () {
-                    echo '父协程ID' . \Co::getPcid();
-                });
-                //协程关闭前调用，是stack
-                defer(function () {
-                    echo 'coroutine 1 stop 1';
-                });
-
-                defer(function () {
-                    echo 'coroutine 1 stop 2';
-                });
-
-                defer(function () {
-                    echo 'coroutine 1 stop 3';
-                });
-            });
-
-            $coroutineId2 = go(function ()  use ($coroutineId1) {
-                \Co::sleep(3);
-                echo 'coroutine 2';
-
-                go(function () {
-                    echo '父协程ID' . \Co::getPcid();
-                });
-
-                var_dump(\Co::exists($coroutineId1));
-
-                defer(function () {
-                    echo 'coroutine 2 stop';
-                });
-            });
-
-            echo $coroutineId1;
         }catch (\Exception $e) {
             return $this->errorExp($e);
         }
@@ -91,5 +62,137 @@ class InitCoroutine extends BaseCoroutine
             'dns_cache_expire' => 60, //设置swoole dns缓存失效时间,单位秒,默认60秒
             'dns_cache_capacity' => 1000, //设置swoole dns缓存容量,默认1000
         ]);
+    }
+
+    /**
+     * 创建协程
+     */
+    public function create()
+    {
+        echo 'create coroutine example :' . PHP_EOL;
+        go(function ()  {
+            echo 'Create a coroutine first' . PHP_EOL;
+
+            go(function () {
+                echo 'Create a coroutine second' . PHP_EOL;
+
+                go(function() {
+                    echo 'Create a coroutine third' . PHP_EOL;
+                });
+
+            });
+        });
+
+        echo PHP_EOL;
+    }
+
+    /**
+     * 释放协程
+     */
+    public function defer()
+    {
+        echo 'coroutine defer example :' . PHP_EOL;
+
+        go(function ()  {
+            echo 'start a coroutine' . PHP_EOL;
+
+            defer(function () {
+                echo 'stop a coroutine 1' . PHP_EOL;
+            });
+
+            defer(function () {
+                echo 'stop a coroutine 2' . PHP_EOL;
+            });
+
+            defer(function () {
+                echo 'stop a coroutine 3' . PHP_EOL;
+            });
+        });
+
+        echo PHP_EOL;
+    }
+
+    /**
+     * 检测协程是否存在
+     */
+    public function exists()
+    {
+        echo 'coroutine exists example :' . PHP_EOL;
+
+        go(function () {
+            go(function () {
+                go(function() {
+                    sleep(0.1);
+                    var_dump(\Co::exists(\Co::getPcid()));
+                });
+
+                go(function() {
+                    sleep(0.3);
+                    var_dump(\Co::exists(\Co::getPcid()));
+                });
+
+                sleep(0.2);
+                var_dump(\Co::exists(\Co::getPcid()));
+            });
+        });
+
+        echo PHP_EOL;
+    }
+
+    /**
+     * 让出协程以及接纳协程
+     */
+    public function yieldResume()
+    {
+        echo 'coroutine yield resume example : ' . PHP_EOL;
+        $oneCid = go(function () {
+                        echo 'This first Coroutine start' . PHP_EOL;
+                        \Co::yield();
+                        echo 'First Coroutine stop' . PHP_EOL;
+                    });
+
+        $twoCid = go(function() use ($oneCid) {
+                    echo 'This Second Coroutine start' . PHP_EOL;
+                    sleep(2);
+                    \Co::resume($oneCid);
+                    echo 'Second Coroutine stop' . PHP_EOL;
+                });
+
+        echo PHP_EOL;
+    }
+
+    /**
+     * 协程信息
+     */
+    public function info()
+    {
+        echo 'coroutine list example : ' . PHP_EOL;
+
+            go(function() {
+
+            });
+
+            go(function() {
+
+            });
+
+            go(function() {
+
+            });
+
+            go(function() {
+                $coros = \Co::listCoroutines();
+                $coros = iterator_to_array($coros);
+
+                echo '显示当前进程下的协程数量 : ' . $coros[0] . PHP_EOL;
+
+                go(function() {
+
+                });
+
+                var_dump(\Co::stats());
+            });
+
+        echo PHP_EOL;
     }
 }
